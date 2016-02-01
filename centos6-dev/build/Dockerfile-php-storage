@@ -1,0 +1,19 @@
+# Dockerfile
+FROM busybox
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+RUN mkdir -p /root \
+             /webapps/libs \
+             /webapps/bin \
+             /usr/lib64/php \
+             /usr/lib64/php-zts \
+             /usr/share/pear \
+             /usr/share/pear-data \
+             /var/log/httpd \
+             /var/log/php; \
+\
+    chown 48:48 /var/log/php /webapps/libs /webapps/bin /usr/share/pear
+
+VOLUME ["/root", "/usr/local", "/var/log/php", "/var/log/httpd", "/usr/lib64/php", "/usr/lib64/php-zts", "/usr/share/pear", "/usr/share/pear-data", "/webapps/libs", "/webapps/bin"]
+
+CMD ["/bin/sh"]

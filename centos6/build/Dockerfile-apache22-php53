@@ -1,0 +1,62 @@
+# Dockerfile
+FROM centos6-prod
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+RUN yum -y install epel-release && \
+yum -y install https://centos6.iuscommunity.org/ius-release.rpm && \
+rpm --import /etc/pki/rpm-gpg/* && \
+\
+\
+yum install --disablerepo=ius -y openssl openssl-devel mod_ssl httpd httpd-tools postfix gcc re2c automake autoconf ImageMagick ImageMagick-devel libyaml-devel libyaml && \
+\
+yum install --enablerepo=ius-archive -y \
+        php53u \
+        php53u-devel \
+        php53u-cli \
+        php53u-zts \
+        php53u-gd \
+        php53u-mbstring \
+        php53u-mcrypt \
+        php53u-mysql \
+        php53u-pdo \
+        php53u-soap \
+        php53u-xml \
+        php53u-xmlrpc \
+        php53u-tidy \
+        php53u-pear \
+        php53u-pecl-xdebug \
+        php53u-pecl-mongo \
+        php53u-intl && \
+\
+yum clean all && \
+\
+\
+pecl update-channels; \
+printf "\n" | pecl install -a -f yaml; \
+printf "\n" | pecl install -a -f imagick; \
+\
+\
+[ -d /docker-storage ] && rm -rf /docker-storage; \
+mkdir -p /docker-storage/usr /docker-storage/php /docker-storage/php-config; \
+\
+cp -RHPfp /root /docker-storage/; \
+cp -RHPfp /usr/local /docker-storage/usr/; \
+cp -RHPfp /usr/lib64/php/* /docker-storage/php/; \
+cp -RHPfp /usr/share/pear /docker-storage/php/; \
+cp -RHPfp /etc/httpd /docker-storage/httpd/; \
+cp -fp    /etc/php.ini /docker-storage/php-config/; \
+cp -Rfp   /etc/php.d /docker-storage/php-config/; \
+\
+\
+rm -rf /etc/httpd/conf/httpd.conf \
+       /etc/httpd/conf.d/php.conf \
+       /etc/httpd/conf.d/welcome.conf \
+       /etc/httpd/conf.d/ssl.conf \
+       /etc/php.d \
+       /etc/php.ini;
+
+
+EXPOSE 80
+EXPOSE 443
+
+CMD ["/docker-entrypoint-init.d/php-entrypoint.sh"]

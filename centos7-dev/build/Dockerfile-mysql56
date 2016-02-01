@@ -1,0 +1,23 @@
+# Dockerfile
+FROM centos7-dev
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+RUN yum install -y https://repo.mysql.com/mysql-community-release-el7.rpm && \
+rpm --import /etc/pki/rpm-gpg/* && \
+\
+\
+yum --enablerepo=mysql56-community install -y \
+    mysql-community-server.x86_64 \
+    mysql-community-client.x86_64 && \
+\
+yum clean all && \
+\
+\
+rm -f /etc/my.cnf; \
+rm -rf /etc/my.cnf.d
+
+
+EXPOSE 3306
+
+CMD ["/docker-entrypoint-init.d/mysql-entrypoint.sh", "mysqld"]
+

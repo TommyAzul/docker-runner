@@ -1,0 +1,47 @@
+# Dockerfile
+FROM centos7-prod
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+#RUN rpm --import http://www.jpackage.org/jpackage.asc && \
+#yum install -y http://mirrors.dotsrc.org/jpackage/6.0/generic/free/RPMS/jpackage-release-6-3.jpp6.noarch.rpm && \
+#yum install -y --nogpgcheck tomcat7 tomcat7-lib tomcat7-jsp tomcat7-webapps tomcat7-admin-webapps && \
+
+RUN yum install -y redhat-lsb-core procps-ng shadow-utils coreutils at bc cronie cronie-anacron crontabs db4-cxx db4-devel ed file gdbm-devel gettext giflib gcc automake glibc-devel glibc-headers kernel-headers libXtst libart_lgpl libgcj m4 mailx pax perl-CGI perl-ExtUtils-MakeMaker perl-ExtUtils-ParseXS perl-Test-Harness perl-Test-Simple perl-devel redhat-lsb-core ssmtp time ttmkfdir tzdata-java xorg-x11-fonts-Type1 && \
+yum clean all && \
+\
+\
+[[ -z $(grep tomcat /etc/group) ]] && groupadd -g 91 tomcat 2>/dev/null; \
+[[ -z $(grep tomcat /etc/passwd) ]] && useradd -u 91 -g 91 tomcat -d /usr/local/stow/tomcat7 -s /sbin/nologin -M 2>/dev/null; \
+\
+[[ ! -d /usr/local/stow ]] && mkdir -p /usr/local/stow; \
+curl -L 'http://ftp.riken.jp/net/apache/tomcat/tomcat-7/v7.0.67/bin/apache-tomcat-7.0.67.tar.gz' \
+     -o /tmp/apache-tomcat-7.0.67.tar.gz && \
+\
+cd /usr/local/stow && \
+tar zxf /tmp/apache-tomcat-7.0.67.tar.gz; \
+ln -s apache-tomcat-7.0.67 tomcat7; \
+chown -R 91:91 tomcat7/logs tomcat7/temp tomcat7/work; \
+\
+\
+curl -L 'http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jdk-8u65-linux-x64.rpm' \
+     -H 'Cookie: oraclelicense=accept-securebackup-cookie' \
+     -o /tmp/jdk-8u65-linux-x64.rpm && \
+\
+rpm -Uvh --force /tmp/jdk-8u65-linux-x64.rpm && \
+rm -f /tmp/jdk-8u65-linux-x64.rpm /tmp/apache-tomcat-7.0.67.tar.gz; \
+\
+\
+[ -d /docker-storage ] && rm -rf /docker-storage; \
+mkdir -p /docker-storage/usr; \
+\
+cp -RHPfp /root /docker-storage/; \
+cp -RHPfp /usr/local /docker-storage/usr/; \
+cp -RHPfp /usr/java /docker-storage/usr/;
+
+
+EXPOSE 8080
+EXPOSE 8009
+
+CMD ["/docker-entrypoint-init.d/tomcat7-entrypoint.sh"]
+
+

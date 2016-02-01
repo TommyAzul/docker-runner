@@ -1,0 +1,17 @@
+# Dockerfile
+FROM busybox
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+RUN mkdir -p /root \
+             /usr/java \
+             /tomcat7/bin \
+             /tomcat7/logs \
+             /tomcat7/temp \
+             /tomcat7/work \
+             /tomcat7/lib; \
+\
+    chown 91:91 /tomcat7/logs /tomcat7/temp /tomcat7/work /tomcat7/bin
+
+VOLUME ["/root", "/usr/java", "/usr/local", "/tomcat7/logs", "/tomcat7/temp", "/tomcat7/work", "/tomcat7/lib", "/tomcat7/bin"]
+
+CMD ["/bin/sh"]

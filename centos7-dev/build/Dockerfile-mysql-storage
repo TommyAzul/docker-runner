@@ -1,0 +1,11 @@
+# Dockerfile
+FROM busybox
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+RUN mkdir -p /var/lib/mysql /var/log/mysql; \
+    chmod 755 /var/lib/mysql /var/log/mysql; \
+    chown 27:27 /var/lib/mysql /var/log/mysql
+
+VOLUME ["/var/lib/mysql", "/var/log/mysql"]
+
+CMD ["/bin/sh"]

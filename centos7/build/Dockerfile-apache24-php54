@@ -1,0 +1,62 @@
+# Dockerfile
+FROM centos7-prod
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+RUN yum -y install epel-release && \
+rpm -Uvh --force http://rpms.famillecollet.com/enterprise/remi-release-7.rpm && \
+rpm --import /etc/pki/rpm-gpg/* && \
+\
+\
+yum install -y openssl openssl-devel mod_ssl httpd httpd-tools postfix && \
+\
+yum install --enablerepo=epel,remi --disablerepo=remi-php55 -y \
+        php \
+        php-cli \
+        php-gd \
+        php-mbstring \
+        php-mcrypt \
+        php-mysqlnd \
+        php-pdo \
+        php-soap \
+        php-xml \
+        php-xmlrpc \
+        php-tidy \
+        php-pear \
+        php-pecl-xdebug \
+        php-pecl-mongo \
+        php-pecl-sqlite \
+        php-pecl-yaml \
+        php-pecl-imagick \
+        php-magickwand \
+        php-php-gettext \
+        php-intl && \
+\
+\
+yum clean all && \
+\
+\
+[ -d /docker-storage ] && rm -rf /docker-storage; \
+mkdir -p /docker-storage/usr /docker-storage/php /docker-storage/php-zts /docker-storage/php-config; \
+\
+cp -RHPfp /root /docker-storage/; \
+cp -RHPfp /usr/local /docker-storage/usr/; \
+cp -RHPfp /usr/lib64/php/* /docker-storage/php/; \
+cp -RHPfp /usr/lib64/php-zts/* /docker-storage/php-zts/; \
+cp -RHPfp /usr/share/pear /docker-storage/php/; \
+cp -RHPfp /usr/share/pear-data /docker-storage/php/; \
+cp -RHPfp /etc/httpd /docker-storage/httpd/; \
+cp -fp    /etc/php.ini /docker-storage/php-config/; \
+cp -Rfp   /etc/php.d /docker-storage/php-config/; \
+\
+\
+rm -rf /etc/httpd/conf/* \
+       /etc/httpd/conf.d/* \
+       /etc/httpd/conf.modules.d \
+       /etc/php.d \
+       /etc/php.ini;
+
+
+EXPOSE 80
+EXPOSE 443
+
+CMD ["/docker-entrypoint-init.d/php-entrypoint.sh"]

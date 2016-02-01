@@ -1,0 +1,53 @@
+mysql56:
+  build: .
+  dockerfile: Dockerfile-mysql56
+  working_dir: /root
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+  mem_limit: 1024m
+  restart: always
+  hostname: mysql
+  domainname: dev
+  extra_hosts:
+    - "dev:192.168.110.100"
+    - "default.dev:192.168.110.100"
+  ports:
+    - "3306:3306"
+    - "3309:3306"
+  volumes:
+    - /mnt/docker-entrypoint-init.d:/docker-entrypoint-init.d
+    - /mnt/build/configs/mysql56:/etc/mysql
+    - /mnt/centos7:/mnt/centos7
+    - /mnt/webapps:/mnt/webapps
+  volumes_from:
+    - mysqldb56:rw
+  container_name: mysql56
+
+php54:
+  build: .
+  dockerfile: Dockerfile-apache24-php54
+  working_dir: /root
+  mem_limit: 768m
+  restart: always
+  hostname: php
+  domainname: dev
+  extra_hosts:
+    - "dev:192.168.110.100"
+    - "default.dev:192.168.110.100"
+    - "mysql:192.168.110.100"
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes:
+    - /mnt/docker-entrypoint-init.d:/docker-entrypoint-init.d
+    - /mnt/build/configs/apache24/conf:/etc/httpd/conf
+    - /mnt/build/configs/apache24/conf.d:/etc/httpd/conf.d
+    - /mnt/build/configs/php54:/etc/php
+    - /mnt/php/apps:/webapps/apps
+    - /mnt/centos7:/mnt/centos7
+    - /mnt/webapps:/mnt/webapps
+  volumes_from:
+    - phpdata54:rw
+  links:
+    - mysql56:db
+  container_name: php54

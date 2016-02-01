@@ -1,0 +1,19 @@
+# Dockerfile
+FROM centos:6
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+RUN yum -y install sudo man man-pages
+RUN yum -y update
+RUN yum -y install passwd openssh openssh-server openssh-clients
+RUN yum clean all
+
+RUN /usr/bin/ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -C '' -N ''
+RUN /usr/bin/ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -C '' -N ''
+RUN /etc/init.d/sshd start
+RUN /etc/init.d/sshd stop
+RUN useradd -u 500 -g 10 -d /home/t_aoki -c 'Tom Aoki' -s /bin/bash -m t_aoki
+RUN echo 't_aoki:t_aokidocker' | chpasswd
+RUN sed -ri 's/# (%wheel\s+ALL=\(ALL\)\s+ALL)$/\1/' /etc/sudoers
+
+EXPOSE 2022
+
+CMD ["/usr/sbin/sshd", "-D"]

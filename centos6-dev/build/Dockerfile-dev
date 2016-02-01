@@ -1,0 +1,29 @@
+# Dockerfile
+FROM centos:6
+MAINTAINER Tom Aoki <tomyaoki@gmail.com>
+
+
+RUN echo -e 'ZONE="Asia/Tokyo"\nUTC="false"\n' | tee /etc/sysconfig/clock && \
+cp -p /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+yum -y update && \
+echo 'export TERM=xterm' >> /root/.bashrc && \
+\
+\
+yum -y install yum-plugin-priorities && \
+\
+yum -y install epel-release && \
+rpm -Uvh --force http://rpms.famillecollet.com/enterprise/remi-release-6.rpm && \
+rpm -Uvh --force http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm && \
+rpm --import /etc/pki/rpm-gpg/* && \
+\
+\
+yum --enablerepo=epel,rpmforge -y install sudo man man-pages vim passwd mlocate tar zip unzip gzip bzip2 p7zip nkf util-linux-ng wget curl rsyslog stow openssh-clients patch git git-svn svn git-all ImageMagick && \
+\
+yum --enablerepo=epel,rpmforge -y install iproute lshw hdparm dmidecode traceroute net-tools bind-utils tree gcc gcc-c++ ncurses ncurses-devel binutils binutils-devel make cmake automake autoconfig openssl-devel openssl && \
+yum --enablerepo=epel,rpmforge -y groupinstall 'Development Tools' && \
+\
+\
+yum reinstall --downloadonly -y man-pages && \
+rpm -Uvh --force /var/cache/yum/x86_64/6/base/packages/man-pages-* && \
+\
+yum clean all

@@ -1,0 +1,24 @@
+mysql56:
+  build: .
+  dockerfile: Dockerfile-mysql56
+  working_dir: /root
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+  mem_limit: 1024m
+  restart: always
+  hostname: mysql
+  domainname: dev
+  extra_hosts:
+    - "dev:192.168.110.100"
+    - "default.dev:192.168.110.100"
+  ports:
+    - "3306:3306"
+    - "3309:3306"
+  volumes:
+    - /mnt/docker-entrypoint-init.d:/docker-entrypoint-init.d
+    - /mnt/build/configs/mysql56:/etc/mysql
+    - /mnt/centos7:/mnt/centos7
+    - /mnt/webapps:/mnt/webapps
+  volumes_from:
+    - mysqldb56:rw
+  container_name: mysql56

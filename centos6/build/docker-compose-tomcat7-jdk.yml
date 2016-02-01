@@ -1,0 +1,55 @@
+mysql56:
+  build: .
+  dockerfile: Dockerfile-mysql56
+  working_dir: /root
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+  mem_limit: 1024m
+  restart: always
+  hostname: mysql
+  domainname: dev
+  extra_hosts:
+    - "dev:192.168.100.100"
+    - "default.dev:192.168.100.100"
+  ports:
+    - "3306:3306"
+    - "3309:3306"
+  volumes:
+    - /mnt/docker-entrypoint-init.d:/docker-entrypoint-init.d
+    - /mnt/build/configs/mysql56:/etc/mysql
+    - /mnt/centos6:/mnt/centos6
+    - /mnt/webapps:/mnt/webapps
+  volumes_from:
+    - mysqldb56:rw
+  container_name: mysql56
+
+tomcat7:
+  build: .
+  dockerfile: Dockerfile-tomcat7-jdk
+  working_dir: /root
+  environment:
+    JAVA_HOME: /usr/java/default
+    CATALINA_BASE: /tomcat7
+    CATALINA_HOME: /usr/local/stow/tomcat7
+  mem_limit: 768m
+  restart: always
+  hostname: tomcat
+  domainname: dev
+  extra_hosts:
+    - "dev:192.168.100.100"
+    - "default.dev:192.168.100.100"
+    - "mysql:192.168.100.100"
+  ports:
+    - "8080:8080"
+    - "8009:8009"
+  volumes:
+    - /mnt/docker-entrypoint-init.d:/docker-entrypoint-init.d
+    - /mnt/build/configs/tomcat7:/tomcat7/conf
+    - /mnt/tomcat7/webapps:/tomcat7/webapps
+    - /mnt/centos6:/mnt/centos6
+    - /mnt/webapps:/mnt/webapps
+  volumes_from:
+    - tomcatdata7:rw
+  links:
+    - mysql56:db
+  container_name: tomcat7
