@@ -118,6 +118,7 @@ There are config files for each servers at `%DOCKER_RUNNER_PATH%\centos6\build\c
 
 Mount infomations of config files:
 
+```
 # HOST <-> SERVICE
 build\configs\apache22\conf   <-> /etc/httpd/conf
 build\configs\apache22\conf.d <-> /etc/httpd/conf.d
@@ -134,23 +135,29 @@ build\configs\tomcat7         <-> /tomcat7/conf
 JAVA_HOME=/usr/java/default
 CATALINA_BASE=/tomcat7
 CATALINA_HOME=/usr/local/stow/tomcat7
+```
 
 
 Mount infomations of server startup scripts:
 
+```
 # HOST <-> SERVICE
 build\docker-entrypoint-init.d <-> /docker-entrypoint-init.d
+```
 
 
 Mount infomations of web application:
 
+```
 # HOST <-> SERVICE
 webapps\php\apps        <-> /webapps/apps
 webapps\tomcat7\webapps <-> /tomcat7/webapps
+```
 
 
 Web application and MySQL database settings:
 
+```
 # php
 /webapps/apps
 /webapps/libs (user library, copy files at startup)
@@ -173,6 +180,7 @@ Web application and MySQL database settings:
 # tomcat web root for user
 /tomcat7
 /tomcat7/webapps
+```
 
 
 

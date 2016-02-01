@@ -118,6 +118,7 @@ docker-runner start php*
 
 設定ファイルパスは下記のようにサービスにマウントされています。
 
+```
 # ホスト <-> サービス
 build\configs\apache22\conf   <-> /etc/httpd/conf
 build\configs\apache22\conf.d <-> /etc/httpd/conf.d
@@ -134,23 +135,28 @@ build\configs\tomcat7         <-> /tomcat7/conf
 JAVA_HOME=/usr/java/default
 CATALINA_BASE=/tomcat7
 CATALINA_HOME=/usr/local/stow/tomcat7
-
+```
 
 サーバー起動スクリプトは下記のようにサービスにマウントされています。
 
+```
 # ホスト <-> サービス
 build\docker-entrypoint-init.d <-> /docker-entrypoint-init.d
+```
 
 
 WEBアプリケーションは下記のようにサービスにマウントされています。
 
+```
 # ホスト <-> サービス
 webapps\php\apps        <-> /webapps/apps
 webapps\tomcat7\webapps <-> /tomcat7/webapps
+```
 
 
 WEBアプリケーション、MySQLデータベースのサービス内のパスは下記のように設定されています。
 
+```
 # php
 /webapps/apps
 /webapps/libs (ユーザライブラリ, サービス起動時にホスト側からコピーされます)
@@ -173,6 +179,7 @@ WEBアプリケーション、MySQLデータベースのサービス内のパス
 # tomcat web root for user
 /tomcat7
 /tomcat7/webapps
+```
 
 
 
