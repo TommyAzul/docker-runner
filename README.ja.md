@@ -189,7 +189,7 @@ WEBアプリケーション、MySQLデータベースのサービス内のパス
 
 #### 異なる仮想マシン作成
 
-```dos.bat
+```bat
 docker-runner.bat -p centos7 create
 
 rem または
@@ -205,7 +205,7 @@ docker-runner.bat --net=192.168.110.1 create
 
 #### 仮想マシンスペック指定をして作成
 
-```dos.bat
+```bat
 docker-runner.bat --cpu=4 --mem=4096 create
 
 rem 初期値
@@ -216,7 +216,7 @@ docker-runner.bat --cpu=2 --mem=2048 create
 
 #### その他
 
-```dos.bat
+```bat
 rem 仮想マシン停止
 docker-runner.bat stop
 

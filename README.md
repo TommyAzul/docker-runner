@@ -190,7 +190,7 @@ Web application and MySQL database settings:
 
 #### How to create another docker machines
 
-```dos.bat
+```bat
 docker-runner.bat -p centos7 create
 
 REM or
@@ -206,7 +206,7 @@ docker-runner.bat --net=192.168.110.1 create
 
 #### How to set machine specs
 
-```dos.bat
+```bat
 docker-runner.bat --cpu=4 --mem=4096 create
 
 REM default parameter
@@ -217,7 +217,7 @@ docker-runner.bat --cpu=2 --mem=2048 create
 
 #### Etc.
 
-```dos.bat
+```bat
 REM stop virtual machine
 docker-runner.bat stop
 
