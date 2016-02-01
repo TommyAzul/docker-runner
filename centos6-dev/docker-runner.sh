@@ -37,8 +37,8 @@ CMD=
 OPTS=
 ARGS=
 
-#source $BIN_DIR/functions.sh
-#setArguments "$@"
+source $BIN_DIR/functions.sh
+setArguments "$@"
 
 if [ -n "$DEBUG" ]; then
     echo "CMD  : "$CMD

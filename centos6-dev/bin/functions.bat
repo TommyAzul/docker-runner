@@ -321,7 +321,7 @@ exit /b 0
     for /f "tokens=*" %%i in ('docker-machine env %PROJECT% --shell cmd') do %%i
     for /f "usebackq tokens=*" %%i IN (`call cscript //nologo bin\gmtime.vbs`) DO set GMT=%%i
 
-    set _cmd="[ ! -d /mnt/%PROJECT% ] && sudo mkdir -p /mnt/%PROJECT%;" ^
+    set _cmd="[ -d /mnt/%PROJECT% ] || sudo mkdir -p /mnt/%PROJECT%;" ^
              "sudo mount -t vboxsf -o defaults,uid=1000,gid=50,dmode=755,fmode=644 \"%PROJECT%\" /mnt/%PROJECT%;" ^
              "cd /mnt/%PROJECT% && ash docker-runner.sh setup;" ^
              "[ -z \"$(grep LANGUAGE ~/.ashrc)\" ]" ^
