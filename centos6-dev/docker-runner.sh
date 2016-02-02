@@ -10,6 +10,7 @@ BACKUP_DIR=/root/backup
 TMP=/tmp
 
 PROJ=$(basename $DIR)
+DOCKER_IMAGE_PROJECT=$(echo $PROJ | sed -r 's/[^a-z0-9]+//g')
 CONF=$BIN_DIR/docker-runner.conf
 
 ## local time (GMT=0 means same with UTC, GMT=9 means Japanese local time)

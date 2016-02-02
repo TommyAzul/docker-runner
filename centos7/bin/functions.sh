@@ -2,7 +2,11 @@
 
 getConfig() {
     local category=$1
-    cat $CONF | sed -ne "/^\[${category}\]$/,/^$/p" | sed -e 1d -e '/^$/d' | egrep -v '^#'
+    cat $CONF | \
+        sed -ne "/^\[${category}\]$/,/^$/p" | \
+        sed -e 1d -e '/^$/d' | \
+        egrep -v '^#' | \
+        sed -r "s/@@DOCKER_IMAGE_PROJECT@@/${DOCKER_IMAGE_PROJECT}/g"
 }
 
 setOptions() {
@@ -88,7 +92,7 @@ setImages() {
 setContainers() {
     local opt=$1
     shift
-    local service=$@
+    local service="$@"
     local priority_keys=$(getConfig priority)
     local priorities=
 
@@ -132,8 +136,8 @@ setConfigs() {
     STORAGE_CONTAINERS=
     SERVICE_CONTAINERS=
 
-    setImages $@
-    setContainers $@
+    setImages "$@"
+    setContainers "$@"
 }
 
 resetConfigs() {
@@ -218,7 +222,7 @@ buildImages() {
     case "$1" in
         storages)
             shift
-            local args=$@
+            local args="$@"
             cd $BUILD_DIR
             for img in $args; do
                 if [ "$img" = "$BASE_IMAGE" ]; then
@@ -233,7 +237,7 @@ buildImages() {
             ;;
         services)
             shift
-            local args=$@
+            local args="$@"
             cd $BUILD_DIR
             for img in $args; do
                 local composefile=$(getConfig services | grep $img | awk '{print $3}' | uniq)
@@ -251,7 +255,7 @@ startServices() {
     case "$1" in
         storages)
             shift
-            local args=$@
+            local args="$@"
             cd $BUILD_DIR
             for srv in $args; do
                 local image=$(getConfig storages | grep $srv | awk '{print $1}' | uniq)
@@ -262,7 +266,7 @@ startServices() {
             ;;
         services)
             shift
-            local args=$@
+            local args="$@"
             cd $BUILD_DIR
             for srv in $args; do
                 local composefile=$(getConfig services | grep $srv | awk '{print $3}' | uniq)
@@ -336,7 +340,7 @@ start () {
 }
 
 login() {
-    if [ -n "$(echo $@ | egrep "data|db")" ]; then
+    if [ -n "$(echo "$@" | egrep "data|db")" ]; then
         local shell=/bin/sh
         local service=$(getStorageContainers | awk '{print $NF}')
     else
@@ -388,7 +392,7 @@ deleteImages() {
     local base=$(echo $BASE_IMAGE | cut -d: -f1)
 
     if [ $# -gt 0 ]; then
-        if [ -n "$(echo $@ | grep $base)" ]; then
+        if [ -n "$(echo "$@" | grep $base)" ]; then
             local images=$images" "$base
         fi
     fi
