@@ -17,7 +17,7 @@ mysql56:
   volumes:
     - /mnt/docker-entrypoint-init.d:/docker-entrypoint-init.d
     - /mnt/build/configs/mysql56:/etc/mysql
-    - /mnt/centos7:/mnt/centos7
+    - /mnt/centos7-dev:/mnt/centos7-dev
     - /mnt/webapps:/mnt/webapps
   volumes_from:
     - mysqldb56:rw

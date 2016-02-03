@@ -17,7 +17,7 @@ mysql56:
   volumes:
     - /mnt/docker-entrypoint-init.d:/docker-entrypoint-init.d
     - /mnt/build/configs/mysql56:/etc/mysql
-    - /mnt/centos6:/mnt/centos6
+    - /mnt/centos6-dev:/mnt/centos6-dev
     - /mnt/webapps:/mnt/webapps
   volumes_from:
     - mysqldb56:rw
@@ -44,7 +44,7 @@ php56:
     - /mnt/build/configs/apache22/conf.d:/etc/httpd/conf.d
     - /mnt/build/configs/php56:/etc/php
     - /mnt/php/apps:/webapps/apps
-    - /mnt/centos6:/mnt/centos6
+    - /mnt/centos6-dev:/mnt/centos6-dev
     - /mnt/webapps:/mnt/webapps
   volumes_from:
     - phpdata56:rw
