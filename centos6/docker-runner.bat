@@ -8,7 +8,8 @@ set OPTIONS=
 set PARAMS=
 set COMMANDS=
 
-set VBOX=%VBOX_MSI_INSTALL_PATH%\VBoxManage.exe
+if "%VBOX_MSI_INSTALL_PATH:~-1%" == "\" set VBOX_DIR=%VBOX_MSI_INSTALL_PATH:~0,-1%
+set VBOX="%VBOX_DIR%"\VBoxManage.exe
 set CONF=bin\docker-runner.conf
 
 set _DOCKER_RUNNER_PATH=d:\VM\Docker
